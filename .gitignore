@@ -14,6 +14,11 @@ __pycache__/
 venv/
 .env
 
+# Java
+*.class
+*.jar
+*.war
+
 # Logs
 *.log
 
