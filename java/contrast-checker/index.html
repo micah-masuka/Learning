@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contrast checker · Java projects</title>
+  <meta name="description" content="Try Micah Masuka's Java WCAG contrast checker in your browser.">
+  <link rel="stylesheet" href="../../css/learn.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="wrap">
+    <header class="site"><a href="../">← Java projects</a><a href="https://github.com/micah-masuka/Learning/blob/main/java/contrast-checker/ContrastChecker.java">View .java source</a></header>
+    <main id="main">
+      <p class="kicker">Java · browser demo</p><h1>Contrast checker</h1>
+      <p class="lede muted">Two colours in. WCAG AA and AAA results out.</p>
+      <div class="terminal">
+        <div class="terminal-bar" aria-hidden="true"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span></div>
+        <form id="contrast-form">
+          <label for="foreground">Foreground</label><input id="foreground" type="text" value="#1c1b19" pattern="#?[0-9a-fA-F]{3}|#?[0-9a-fA-F]{6}" required>
+          <label for="background">Background</label><input id="background" type="text" value="#f6f5f2" pattern="#?[0-9a-fA-F]{3}|#?[0-9a-fA-F]{6}" required>
+          <button type="submit">Check contrast</button>
+        </form>
+        <output id="result" class="terminal-output" aria-live="polite"></output>
+      </div>
+      <p class="demo-note muted">This page uses JavaScript to reproduce the calculation from <a href="https://github.com/micah-masuka/Learning/blob/main/java/contrast-checker/ContrastChecker.java">ContrastChecker.java</a>. The original remains a Java terminal app.</p>
+    </main>
+  </div>
+  <script>
+    const form = document.getElementById('contrast-form');
+    const result = document.getElementById('result');
+    const parseHex = (raw) => {
+      let value = raw.replace(/^#/, '');
+      if (value.length === 3) value = [...value].map((letter) => letter + letter).join('');
+      return Number.parseInt(value, 16);
+    };
+    const channel = (value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    const luminance = (rgb) => 0.2126 * channel(((rgb >> 16) & 255) / 255) + 0.7152 * channel(((rgb >> 8) & 255) / 255) + 0.0722 * channel((rgb & 255) / 255);
+    const pass = (ratio, minimum) => ratio + 0.0001 >= minimum ? 'pass' : 'fail';
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const a = luminance(parseHex(document.getElementById('foreground').value));
+      const b = luminance(parseHex(document.getElementById('background').value));
+      const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+      result.textContent = `Ratio  ${ratio.toFixed(2)} : 1\nNormal text  AA ${pass(ratio, 4.5)}   AAA ${pass(ratio, 7)}\nLarge text   AA ${pass(ratio, 3)}   AAA ${pass(ratio, 4.5)}`;
+    });
+    form.requestSubmit();
+  </script>
+</body>
+</html>

@@ -7,10 +7,10 @@ Short notes from things I am actually building. Not a course. Just what I figure
 
 ## Java
 
-Console apps. Clone the repo, install a JDK, then `javac` and `java`.
+Console apps with browser demos. No install is needed to try them online; clone the repo and use a JDK to run the original Java versions.
 
-- **[Contrast checker](java/contrast-checker/)** — two hex colours in, WCAG contrast out
-- **[UX quiz](java/ux-quiz/)** — the same six questions, in the terminal
-- **[Password gate](java/password-gate/)** — console version of the portfolio lock
+- **[Contrast checker](https://micah-masuka.github.io/Learning/java/contrast-checker/)** — two hex colours in, WCAG contrast out ([Java source](java/contrast-checker/ContrastChecker.java))
+- **[UX quiz](https://micah-masuka.github.io/Learning/java/ux-quiz/)** — the same six questions, in the terminal ([Java source](java/ux-quiz/UxQuiz.java))
+- **[Password gate](https://micah-masuka.github.io/Learning/java/password-gate/)** — console version of the portfolio lock ([Java source](java/password-gate/PasswordGate.java))
 
 These pages also live on GitHub Pages: [micah-masuka.github.io/Learning](https://micah-masuka.github.io/Learning/)

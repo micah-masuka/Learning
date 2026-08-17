@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Password gate · Java projects</title>
+  <meta name="description" content="Try Micah Masuka's Java password gate in your browser.">
+  <link rel="stylesheet" href="../../css/learn.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="wrap">
+    <header class="site"><a href="../">← Java projects</a><a href="https://github.com/micah-masuka/Learning/blob/main/java/password-gate/PasswordGate.java">View .java source</a></header>
+    <main id="main">
+      <p class="kicker">Java · browser demo</p><h1>Password gate</h1>
+      <p class="lede muted">A console lock. Password: <strong>try-me</strong></p>
+      <div class="terminal">
+        <div class="terminal-bar" aria-hidden="true"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span></div>
+        <p>Password-locked note<br><span class="muted">A recruiter should get in. A random visitor should not.</span></p>
+        <form id="gate-form">
+          <label for="password">Password</label><input id="password" type="password" autocomplete="off" required>
+          <button type="submit">Unlock</button><p class="gate-error" id="error" hidden>Incorrect password. Hint: try-me</p>
+        </form>
+        <div id="note" hidden tabindex="-1">
+          <p>You are in.</p>
+          <p>For a portfolio, this is enough: it slows down casual clicks<br>and still lets a hiring manager through.</p>
+          <p>It is not security. Anyone can open the source.<br>Do not put client originals or private data behind a check like this.</p>
+          <button type="button" id="reset">Lock again</button>
+        </div>
+      </div>
+      <p class="demo-note muted">This page uses JavaScript to reproduce <a href="https://github.com/micah-masuka/Learning/blob/main/java/password-gate/PasswordGate.java">PasswordGate.java</a>. Like the Java original, it is a teaching example—not secure storage.</p>
+    </main>
+  </div>
+  <script>
+    const form = document.getElementById('gate-form');
+    const input = document.getElementById('password');
+    const error = document.getElementById('error');
+    const note = document.getElementById('note');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (input.value.trim().toLowerCase() !== 'try-me') { error.hidden = false; input.select(); return; }
+      form.hidden = true; note.hidden = false; note.focus();
+    });
+    document.getElementById('reset').addEventListener('click', () => {
+      input.value = ''; error.hidden = true; note.hidden = true; form.hidden = false; input.focus();
+    });
+  </script>
+</body>
+</html>

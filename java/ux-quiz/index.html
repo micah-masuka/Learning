@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UX quiz · Java projects</title>
+  <meta name="description" content="Try Micah Masuka's Java UX quiz in your browser.">
+  <link rel="stylesheet" href="../../css/learn.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="wrap">
+    <header class="site"><a href="../">← Java projects</a><a href="https://github.com/micah-masuka/Learning/blob/main/java/ux-quiz/UxQuiz.java">View .java source</a></header>
+    <main id="main">
+      <p class="kicker">Java · browser demo</p><h1>UX quiz</h1>
+      <p class="lede muted">Six questions. Pick 1, 2, or 3—just like the terminal app.</p>
+      <div class="terminal"><div class="terminal-bar" aria-hidden="true"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span></div><div id="quiz"></div></div>
+      <p class="demo-note muted">This page uses JavaScript to reproduce <a href="https://github.com/micah-masuka/Learning/blob/main/java/ux-quiz/UxQuiz.java">UxQuiz.java</a>. The original reads the same answers with Java's <code>Scanner</code>.</p>
+    </main>
+  </div>
+  <script>
+    const questions = [
+      ['A page has one main action. Where should the primary button sit?', ['At the end of the task, easy to find', 'Hidden in a menu on desktop, so the page stays clean', 'Styled exactly like every other text link'], 0, 'People should not hunt for the next step. One clear button, in the path of the task.'],
+      ['Someone types the wrong password. What is the better response?', ['“Error 401” and nothing else', '“Incorrect password. Try again or email Micah.” next to the field', 'A popup that vanishes after one second'], 1, 'Say what went wrong and what to do next. Keep the message next to the field they just used.'],
+      ['Placeholder text inside a form field…', ['Can replace the visible label', 'Disappears when you type, so it should not be the only instruction', 'Is required by browsers'], 1, 'Labels stay. Placeholders vanish. If the hint matters, put it outside the field.'],
+      ['A “skip to content” link is for…', ['Skipping the website entirely', 'Keyboard users jumping past the nav to the main content', 'Search engines only'], 1, 'Screen reader and keyboard users should not tab through every nav link on every page.'],
+      ['A password on a public case-study page is…', ['Bank-level security', 'A polite gate for casual visitors. Real secrets still should not live in the public files', 'Useless, so never use one'], 1, 'It slows down nosy clicks. It does not hide source code. Size the lock to the risk.'],
+      ['Four answers to one question should be marked up as…', ['Clickable divs with no form controls', 'Radio buttons in a fieldset, with the question as the legend', 'A dropdown labelled “Select”'], 1, 'Radios are made for “pick one.” A fieldset + legend tells assistive tech what the group is about.']
+    ];
+    const root = document.getElementById('quiz'); let index = 0; let score = 0;
+    const resultCopy = (n) => n === 6 ? 'Full marks. You notice the boring stuff that makes a page usable.' : n >= 4 ? 'Solid. You are thinking about the person in front of the screen, not only the layout.' : n >= 2 ? 'A fair start. The “why” under each answer is the useful bit.' : 'No stress. Read the notes, then try again.';
+    function render() {
+      const [prompt, options, answer, why] = questions[index];
+      root.innerHTML = `<p>${index + 1} / ${questions.length}<br>${prompt}</p><form id="answer-form"><fieldset><legend class="skip-link">Choose an answer</legend>${options.map((option, i) => `<label class="choice"><input type="radio" name="answer" value="${i}" required><span>${i + 1}) ${option}</span></label>`).join('')}</fieldset><button>Enter answer</button><p id="feedback" class="feedback" hidden aria-live="polite"></p></form>`;
+      const form = document.getElementById('answer-form'); let checked = false;
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (checked) { index += 1; index < questions.length ? render() : finish(); return; }
+        const picked = Number(new FormData(form).get('answer')); if (picked === answer) score += 1; checked = true;
+        form.querySelectorAll('input').forEach((item) => { item.disabled = true; });
+        const feedback = document.getElementById('feedback'); feedback.hidden = false; feedback.textContent = (picked === answer ? 'Yes. ' : 'Not that one. ') + why;
+        form.querySelector('button').textContent = index === questions.length - 1 ? 'See score' : 'Next question';
+      });
+    }
+    function finish() { root.innerHTML = `<p>Score  ${score} / ${questions.length}</p><p>${resultCopy(score)}</p><button id="again">Play again</button>`; document.getElementById('again').addEventListener('click', () => { index = 0; score = 0; render(); }); }
+    render();
+  </script>
+</body>
+</html>

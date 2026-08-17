@@ -113,7 +113,8 @@ a { color: inherit; }
 label { display: block; font-weight: 600; margin-block-end: 0.35rem; }
 
 input[type="password"],
-input[type="text"] {
+input[type="text"],
+input[type="color"] {
   width: 100%;
   font: inherit;
   padding: 0.6rem 0.75rem;
@@ -186,3 +187,45 @@ legend { font-weight: 700; margin-block-end: 0.75rem; padding: 0; }
 .score { font-size: 2.4rem; font-weight: 700; line-height: 1; margin: 0.4rem 0 0.8rem; }
 
 .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+.terminal {
+  margin-block: 1.5rem;
+  padding: 1.25rem;
+  overflow: hidden;
+  border: 1px solid #3e4248;
+  border-radius: var(--radius);
+  background: #17191d;
+  color: #f2f3f5;
+  box-shadow: 0 0.8rem 2rem rgb(28 27 25 / 12%);
+}
+
+.terminal-bar {
+  display: flex;
+  gap: 0.4rem;
+  margin: -0.25rem 0 1.1rem;
+}
+
+.terminal-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: #ff5f57; }
+.terminal-dot:nth-child(2) { background: #febc2e; }
+.terminal-dot:nth-child(3) { background: #28c840; }
+
+.terminal p,
+.terminal label,
+.terminal input,
+.terminal button,
+.terminal output {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.terminal input[type="text"],
+.terminal input[type="password"] {
+  border-color: #656b74;
+  background: #24272d;
+  color: #fff;
+}
+
+.terminal button { background: #f2f3f5; color: #17191d; }
+.terminal .muted { color: #b8bdc6; }
+.terminal .gate-error { color: #ff9b8f; }
+.terminal-output { white-space: pre-wrap; margin-block: 1rem 0; }
+.demo-note { font-size: 0.92rem; }

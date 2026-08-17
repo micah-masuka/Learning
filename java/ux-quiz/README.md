@@ -10,3 +10,5 @@ java UxQuiz
 ```
 
 Type `1`, `2`, or `3` for each question.
+
+[Try the browser demo](https://micah-masuka.github.io/Learning/java/ux-quiz/) — no JDK needed.

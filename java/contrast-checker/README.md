@@ -12,3 +12,5 @@ java ContrastChecker
 ```
 
 Example: `#1c1b19` on `#f6f5f2`
+
+[Try the browser demo](https://micah-masuka.github.io/Learning/java/contrast-checker/) — no JDK needed. The demo mirrors this Java program with JavaScript because GitHub Pages serves static web files and cannot run Java console programs directly.
