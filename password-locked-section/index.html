@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Password-locked web sections · Learning</title>
+  <meta name="description" content="A short note on gating a confidential case study behind a password.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/learn.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="wrap">
+    <header class="site">
+      <a href="../">← Learning</a>
+      <a href="https://micah.digitale-tech.com/case-studies/sanex">Sanex case</a>
+    </header>
+    <main id="main">
+      <p class="kicker">Note</p>
+      <h1>Password-locked web sections</h1>
+      <p class="lede">A recruiter should be able to open a confidential case study. A random visitor should not. That is a gate, not a vault.</p>
+      <p>I used one on my Sanex write-up. The password goes in the job application. The form has a real label, a password field, a button, and an error next to the field if they miss. Once they get in, this tab stays unlocked until they close it.</p>
+
+      <div class="card" id="demo">
+        <p class="kicker">Demo</p>
+        <h2>Try the gate</h2>
+        <p class="muted">This is a teaching copy. Password: <strong>try-me</strong></p>
+
+        <form id="gate-form">
+          <label for="gate-password">Password</label>
+          <input id="gate-password" name="password" type="password" autocomplete="off" required>
+          <button type="submit">View note</button>
+          <p class="gate-error" id="gate-error" hidden>Incorrect password. Hint: try-me</p>
+        </form>
+
+        <div id="unlocked" hidden tabindex="-1">
+          <p>You are in. For a portfolio, this is enough: it slows down casual clicks and still lets a hiring manager through.</p>
+          <p>It is <strong>not</strong> security. Anyone can view the page source. Do not put client originals, private data, or anything harmful behind a front-end check like this. If it must stay private, keep it off the public site.</p>
+        </div>
+      </div>
+
+      <h2>What I wanted</h2>
+      <p>No extra server. No user accounts. A password I can paste into an application. An error that tells them what to do next, not “Error 401”.</p>
+      <h2>What I would do next</h2>
+      <p>For something more serious, the check would live on the server, and the protected files would not be public at all. For a UX case study, the polite gate was the right size of solution.</p>
+    </main>
+  </div>
+  <script>
+    const KEY = 'learn-gate:demo';
+    const form = document.getElementById('gate-form');
+    const input = document.getElementById('gate-password');
+    const error = document.getElementById('gate-error');
+    const unlocked = document.getElementById('unlocked');
+
+    const show = () => {
+      form.hidden = true;
+      unlocked.hidden = false;
+    };
+
+    try {
+      if (sessionStorage.getItem(KEY) === 'open') show();
+    } catch {
+      /* ignore */
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      error.hidden = true;
+      if (input.value.trim().toLowerCase() === 'try-me') {
+        try { sessionStorage.setItem(KEY, 'open'); } catch { /* ignore */ }
+        show();
+        unlocked.focus?.();
+        return;
+      }
+      error.hidden = false;
+      input.select();
+    });
+  </script>
+</body>
+</html>

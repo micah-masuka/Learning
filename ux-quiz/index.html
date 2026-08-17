@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UX quiz · Learning</title>
+  <meta name="description" content="A short six-question UX quiz with instant feedback.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/learn.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="wrap">
+    <header class="site">
+      <a href="../">← Learning</a>
+      <a href="https://micah.digitale-tech.com/">Portfolio</a>
+    </header>
+    <main id="main">
+      <p class="kicker">Game</p>
+      <h1>UX quiz</h1>
+      <p class="lede muted">Six questions. No timer. Pick one, then see why.</p>
+
+      <div id="quiz"></div>
+    </main>
+  </div>
+  <script>
+    const questions = [
+      {
+        q: 'A page has one main action. Where should the primary button sit?',
+        options: [
+          'At the end of the task, easy to find',
+          'Hidden in a menu on desktop, so the page stays clean',
+          'Styled exactly like every other text link'
+        ],
+        answer: 0,
+        why: 'People should not hunt for the next step. One clear button, in the path of the task.'
+      },
+      {
+        q: 'Someone types the wrong password. What is the better response?',
+        options: [
+          '“Error 401” and nothing else',
+          '“Incorrect password. Try again or email Micah.” next to the field',
+          'A popup that vanishes after one second'
+        ],
+        answer: 1,
+        why: 'Say what went wrong and what to do next. Keep the message next to the field they just used.'
+      },
+      {
+        q: 'Placeholder text inside a form field…',
+        options: [
+          'Can replace the visible label',
+          'Disappears when you type, so it should not be the only instruction',
+          'Is required by browsers'
+        ],
+        answer: 1,
+        why: 'Labels stay. Placeholders vanish. If the hint matters, put it outside the field.'
+      },
+      {
+        q: 'A “skip to content” link is for…',
+        options: [
+          'Skipping the website entirely',
+          'Keyboard users jumping past the nav to the main content',
+          'Search engines only'
+        ],
+        answer: 1,
+        why: 'Screen reader and keyboard users should not tab through every nav link on every page.'
+      },
+      {
+        q: 'A password on a public case-study page is…',
+        options: [
+          'Bank-level security',
+          'A polite gate for casual visitors. Real secrets still should not live in the public files',
+          'Useless, so never use one'
+        ],
+        answer: 1,
+        why: 'It slows down nosy clicks. It does not hide source code. Size the lock to the risk.'
+      },
+      {
+        q: 'Four answers to one question should be marked up as…',
+        options: [
+          'Clickable divs with no form controls',
+          'Radio buttons in a fieldset, with the question as the legend',
+          'A dropdown labelled “Select”'
+        ],
+        answer: 1,
+        why: 'Radios are made for “pick one.” A fieldset + legend tells assistive tech what the group is about.'
+      }
+    ];
+
+    const root = document.getElementById('quiz');
+    let index = 0;
+    let score = 0;
+    let locked = false;
+
+    const resultCopy = (n) => {
+      if (n === 6) return 'Full marks. You notice the boring stuff that makes a page usable.';
+      if (n >= 4) return 'Solid. You are thinking about the person in front of the screen, not only the layout.';
+      if (n >= 2) return 'A fair start. The “why” under each answer is the useful bit.';
+      return 'No stress. Read the notes, then try again.';
+    };
+
+    function renderQuestion() {
+      locked = false;
+      const item = questions[index];
+      const name = `q-${index}`;
+      root.innerHTML = `
+        <p class="progress">${index + 1} / ${questions.length}</p>
+        <form id="q-form">
+          <fieldset>
+            <legend>${item.q}</legend>
+            ${item.options.map((label, i) => `
+              <label class="choice">
+                <input type="radio" name="${name}" value="${i}" required>
+                <span>${label}</span>
+              </label>
+            `).join('')}
+          </fieldset>
+          <div class="actions">
+            <button type="submit">Check</button>
+          </div>
+          <p class="feedback" id="why" hidden></p>
+        </form>
+      `;
+      const form = root.querySelector('#q-form');
+      const why = root.querySelector('#why');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (locked) {
+          next();
+          return;
+        }
+        const picked = Number(new FormData(form).get(name));
+        const correct = picked === item.answer;
+        if (correct) score += 1;
+        locked = true;
+        why.hidden = false;
+        why.textContent = (correct ? 'Yes. ' : 'Not that one. ') + item.why;
+        form.querySelectorAll('input').forEach((el) => { el.disabled = true; });
+        form.querySelector('button').textContent = index === questions.length - 1 ? 'See score' : 'Next';
+      });
+    }
+
+    function next() {
+      index += 1;
+      if (index >= questions.length) {
+        renderScore();
+        return;
+      }
+      renderQuestion();
+    }
+
+    function renderScore() {
+      root.innerHTML = `
+        <p class="kicker">Result</p>
+        <p class="score">${score} / ${questions.length}</p>
+        <p>${resultCopy(score)}</p>
+        <div class="actions">
+          <button type="button" id="again">Play again</button>
+          <a class="button" href="../password-locked-section/">Password-lock note</a>
+        </div>
+      `;
+      root.querySelector('#again').addEventListener('click', () => {
+        index = 0;
+        score = 0;
+        renderQuestion();
+      });
+    }
+
+    renderQuestion();
+  </script>
+</body>
+</html>

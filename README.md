@@ -1,13 +1,8 @@
 # Learning
 
-Project: Learning
+Short notes from things I am actually building. Not a course. Just what I figured out, in plain language.
 
-Description: (Auto-generated placeholder) Short description of the project goes here.
+- **[Password-locked web sections](password-locked-section/)** — how I hid a confidential case study behind a password, and what that is (and is not) good for
+- **[UX quiz](ux-quiz/)** — a two-minute game. Six questions. Instant feedback.
 
-How to run:
-- Add basic instructions to run or build this project.
-
-Notes:
-- This README was generated automatically. Please edit to add project-specific details.
-
-License: Specify project license here.
+These pages also live on GitHub Pages: [micah-masuka.github.io/Learning](https://micah-masuka.github.io/Learning/)
